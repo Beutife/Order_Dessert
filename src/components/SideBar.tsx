@@ -1,4 +1,3 @@
-import React from "react";
 import emptyCart from '../product-list-with-cart-main/assets/images/illustration-empty-cart.svg';
 import  increment from '../product-list-with-cart-main/assets/images/icon-increment-quantity.svg';
 import decrease from '../product-list-with-cart-main/assets/images/icon-decrement-quantity.svg'

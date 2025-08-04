@@ -1,4 +1,3 @@
-import React from "react";
 import datas from '../product-list-with-cart-main/data.json'
 import { useState } from "react";
 import SideBar from "./SideBar";
