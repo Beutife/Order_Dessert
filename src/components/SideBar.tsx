@@ -13,9 +13,15 @@ interface SideBarProps {
     onIncrement: (name: string) => void;
     onDecrement: (name: string) => void;
     onRemove: (name: string) => void;
+    onConfirmOrder: () => void;
   }
+
   
-  const SideBar = ({ cartItems, onIncrement, onDecrement, onRemove }: SideBarProps) => {
+  const SideBar = ({ cartItems, onIncrement, onDecrement, onRemove, onConfirmOrder }: SideBarProps) => {
+    
+    const totalPrice = cartItems.reduce(
+        (sum, item)=> sum + item.price * item.quantity, 0
+    ) 
     return (
       <div className="w-80 bg-white p-4 shadow-lg">
         <h2 className="text-xl font-bold mb-4">Cart <span className="text-red-600">{cartItems.length}</span></h2>
@@ -35,11 +41,11 @@ interface SideBarProps {
                     <span>{item.name}</span>
                     <span className="block text-gray-500 text-sm">${item.price.toFixed(2)}</span>
                     <div className="flex items-center gap-2">
-                      <button className="bg-blue-500 p-2 rounded" onClick={() => onDecrement(item.name)}>
+                      <button className="bg-orange-500 p-1 rounded" onClick={() => onDecrement(item.name)}>
                         <img src={decrease} alt="decrease" />
                       </button>
                       <span>{item.quantity}</span>
-                      <button className="bg-blue-500 p-2 rounded" onClick={() => onIncrement(item.name)}>
+                      <button className="bg-orange-500 p-1 rounded" onClick={() => onIncrement(item.name)}>
                         <img src={increment} alt="increase" />
                       </button>
                     </div>
@@ -49,6 +55,15 @@ interface SideBarProps {
               ))}
             </ul>
           )}
+          <div className="mt-4 flex justify-around items-center gap-4">
+            <span>Total </span>
+            <span className="bg-orange-200 p-2 rounded-md">
+                ${totalPrice.toFixed(2)}
+            </span>
+            </div>
+            <button className="bg-red-800 p-4 rounded-full w-full mt-4 text-white hover:bg-red-600" onClick={onConfirmOrder}>
+                Confirm Order
+            </button>
         </div>
       </div>
     );

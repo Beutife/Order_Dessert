@@ -2,6 +2,7 @@ import React from "react";
 import datas from '../product-list-with-cart-main/data.json'
 import { useState } from "react";
 import SideBar from "./SideBar";
+import OrderConfirmModal from "./Order";
 // Import images
 import waffleDesktop from '../product-list-with-cart-main/assets/images/image-waffle-desktop.jpg';
 import cremeBruleeDesktop from '../product-list-with-cart-main/assets/images/image-creme-brulee-desktop.jpg';
@@ -29,14 +30,19 @@ interface Product {
 }
 
 const Cart = () => {
+    const [showModal, setShowModal] = useState(false);
+
+    const handleConfirmOrder = () => {
+        setShowModal(true);
+    };
     const [addCart, setAddCart] = useState<Product[]>([])
 
-    const handleAddToCart = (product: Product) => {
+    const handleAddToCart = (product: any) => {
         setAddCart(prevCart => {
           const existingItem = prevCart.find(item => item.name === product.name);
           if(existingItem){
             return prevCart.map(item =>
-              item.name === product.name ? {...item, quantity: item.quantity + 1} : item
+              item.name === product.name  ? {...item, quantity: item.quantity + 1} : item
             );
           };
           return [...prevCart, {...product, quantity:1}];
@@ -53,10 +59,11 @@ const Cart = () => {
     const handledecrement = (productName: string) => {
         setAddCart(prevCart => 
           prevCart.map(item =>(
-            item.name === productName ? {...item, quantity: item.quantity-1} : item
+            item.name === productName && item.quantity > 1 ? {...item, quantity: item.quantity-1} : item
           ))
         )
     }
+
 
     const handleremove = (productName: string) => {
        setAddCart(prevCart => prevCart.filter(item => item.name !== productName))
@@ -118,11 +125,20 @@ const Cart = () => {
               }
            </div>
            </div>
-           <SideBar cartItems ={addCart}
-            onIncrement = {handleincrement}
+           <SideBar 
+            cartItems={addCart}
+            onIncrement={handleincrement}
             onRemove={handleremove}
-            onDecrement = {handledecrement}
+            onDecrement={handledecrement}
+            onConfirmOrder={handleConfirmOrder}
            />
+           
+           {showModal && (
+             <OrderConfirmModal 
+               cartItems={addCart}
+               onClose={() => setShowModal(false)}
+             />
+           )}
         </div>
     )
 }
